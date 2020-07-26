@@ -1,28 +1,46 @@
+/* 
+  LIBRARIES
+*/
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-// const cors = require('cors');
 
 
-//-- Server configurations
+/* 
+  GLOBAL DECLARATIONS
+*/
+_ = require('lodash')
+
 const config = require('./config');
-const environment = process.env.NODE_ENV;
-// console.log(config);
+app_constants = config.constants
 
+
+/* 
+  SERVER
+*/
 const app = express();
 
-//-- Allow cross origin requests
-// app.use(cors());
+
+/* 
+  MIDDLEWARES
+*/
+const logger = require('./app/middlewares/Logger.js');
 
 //-- Configure bodyparser to handle post requests
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.use(logger);
 
-//-- Include routes folder for app routing
+
+/* 
+  ROUTES
+*/
 require('./config/routes.js')(app);
 
-//-- Start listening
+
+/* 
+  START SERVER
+*/
 app.listen(config.port, () => {
   console.log('Server is running on ' + config.port);
 });
