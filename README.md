@@ -45,4 +45,105 @@ Start the project
 |_ _ |_ _ |_ _ index.ejs  
     
 ## Controllers
-Controllers are added directly in `api/controller` folder with the namin convention `ModelnameController`
+Controllers are added directly in `api/controller` folder with the naming convention `ModelnameController`.  
+Example controller..
+```
+const User = require('../models/User');
+
+
+module.exports = {
+
+  // Get all users from DB
+  // GET /api/users
+  getAll: async (req, res) => {
+    let users = await User.find({})
+    res.send(users)
+  },
+
+
+  // Get users w.r.t id from DB
+  // GET /api/users/:id
+  get: async (req, res) => {
+    let user = await User.findById(req.params.id)
+    res.send(user);
+  },
+
+
+  // Create new User in DB
+  // POST /api/users/create
+  create: async (req, res) => {
+    let newUser = new User(
+      {
+        name: req.body.name,
+        email: req.body.email,
+        gender: req.body.gender,
+        active: true
+      }
+    );
+
+    let user = await newUser.save()
+    res.send({ message: 'User created successfully!', data: user });
+  },
+
+
+  // Update User w.r.t id from DB
+  // PUT /api/users/update/:id
+  update: async (req, res) => {
+    let user = await User.findByIdAndUpdate(req.params.id, {$set: req.body})
+    res.send({ message: 'User updated successfully!', data: user });
+  },
+
+
+  // Delete User w.r.t id from DB
+  // DELETE /api/users/delete/:id
+  delete: async (req, res) => {
+    await User.findByIdAndRemove(req.params.id)
+    res.send('User deleted successfully!');
+  },
+
+};
+```  
+  
+## Middlewares
+Middlewares are added directly in `api/middlewares` folder. Middleware are functions that have access to the request object, the response object and the next function in the application's request-response cycle.  
+Example middleware.. 
+```
+
+module.exports = (err, req, res, next) => {
+
+  console.log('Error middleware');
+  console.log(err.stack);
+
+  res.status(500).send('Something went wrong!')
+  
+};
+```
+  
+## Models
+Models are added directly in `api/models` folder with the naming convention `Modelname`.  
+Example model..  
+```
+const mongoose = require('mongoose');
+
+//-- Setup schema
+var UserSchema = mongoose.Schema({
+  name: {type: String, required: true, max: 100},
+  email: {type: String, required: true, max: 200},
+  gender: {type: String, required: true, max: 500},
+  active: {type: Boolean, required: true}
+});
+
+//-- Export the model
+module.exports = mongoose.model('User', UserSchema);
+```
+    
+## Views
+Views are design/html files for the application and are added directly in `views` folder with the naming convention `views/Modelname/views.ejs`. Views folder will contain folder for each model, that will contain views for that model.  
+
+|_ _ **views**  
+|_ _ |_ _ **user**  
+|_ _ |_ _ |_ _ index.ejs  
+|_ _ |_ _ |_ _ edit.ejs  
+|_ _ |_ _ **model2**  
+|_ _ |_ _ |_ _ index.ejs  
+|_ _ |_ _ |_ _ delete.ejs  
