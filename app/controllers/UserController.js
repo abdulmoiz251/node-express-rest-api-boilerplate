@@ -3,7 +3,7 @@ const User = require('../models/User');
 
 module.exports = {
 
-  // Get all users from mongodb
+  // Get all users from DB
   // GET /api/users
   getAll: async (req, res) => {
     let users = await User.find({})
@@ -11,7 +11,7 @@ module.exports = {
   },
 
 
-  // Get users w.r.t id from mongodb
+  // Get users w.r.t id from DB
   // GET /api/users/:id
   get: async (req, res) => {
     let user = await User.findById(req.params.id)
@@ -19,7 +19,7 @@ module.exports = {
   },
 
 
-  // Create new User in mongodb
+  // Create new User in DB
   // POST /api/users/create
   create: async (req, res) => {
     let newUser = new User(
@@ -36,7 +36,7 @@ module.exports = {
   },
 
 
-  // Update User w.r.t id from mongodb
+  // Update User w.r.t id from DB
   // PUT /api/users/update/:id
   update: async (req, res) => {
     let user = await User.findByIdAndUpdate(req.params.id, {$set: req.body})
@@ -44,7 +44,7 @@ module.exports = {
   },
 
 
-  // Delete User w.r.t id from mongodb
+  // Delete User w.r.t id from DB
   // DELETE /api/users/delete/:id
   delete: async (req, res) => {
     await User.findByIdAndRemove(req.params.id)
